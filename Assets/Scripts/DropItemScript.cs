@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DropItemScript : MonoBehaviour {
+	//Untuk semua DropItem
+
 	private float dropItemSpeed = -5f;	//kecepatan DropItem jatuh
 	public int id = 0;					//id untuk dropItem
 	private GameObject Player;			//untuk efek magnet harus mencari posisi player

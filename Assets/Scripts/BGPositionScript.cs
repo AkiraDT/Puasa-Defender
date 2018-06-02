@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BGPositionScript : MonoBehaviour {
+	//Untuk scrolling Background (TIDAKDIGUNAKAN)
+
 	private Transform[] layers;
 	private int bottomIndex;
 	private int aboveIndex;

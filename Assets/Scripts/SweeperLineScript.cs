@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SweeperLineScript : MonoBehaviour {
+	//Garis pembidik sebelum dajjal muncul
+
 	private float sweeperLineSpeed = 0.3f;
 	private float time;
 	private float spawnTimer;
 	private GameObject Player;
-	public GameObject Meteorit;
+	public GameObject Meteorit;		//dajjal
 	public float fireSpeed = 5.0f;
 	private float direction;
 
@@ -21,9 +23,11 @@ public class SweeperLineScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		time += Time.deltaTime;
-		if (time >= spawnTimer && !Player.GetComponent<PlayerControler>().Boost) {
-			Fire ();
+		if (time >= spawnTimer && !Player.GetComponent<PlayerControler>().Boost) {	//jika player tidak sedang PowerUp lupa
+			Fire ();		//menembakan dajjal
 		}
+
+		//mengikuti posisi player
 		if (Player.transform.position.x < this.transform.position.x) {
 			direction = -1;
 		} else if (Player.transform.position.x > this.transform.position.x) {

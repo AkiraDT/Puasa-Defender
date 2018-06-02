@@ -5,17 +5,17 @@ using UnityEngine.SceneManagement;
 using DragonBones;
 
 public class PlayerControler : MonoBehaviour {
-	public GameObject[] Bullet;		//Untuk menyimpan sprite peluru/sendok dari level 1-max (karena array jadi dari 0)
-	public Sprite normalSprite;		//Untuk menyimpan sprite ketika player dalam keadaan normal
-	public Sprite boostSprite;		//untuk menyimpan Sprite ketika dapat powerUp Lupa
-	public float bulletSpeed = 15.0f;		//Untuk mengatur kecepatan peluru meluncur
-	public float fireRate;		//Untuk menentukan fireRate/seberapa cepat peluru keluar perdetiknya (makin kecil angka makin cepat)
+	public GameObject[] Bullet;			//Untuk menyimpan sprite peluru/sendok dari level 1-max (karena array jadi dari 0)
+	public Sprite normalSprite;			//Untuk menyimpan sprite ketika player dalam keadaan normal
+	public Sprite boostSprite;			//untuk menyimpan Sprite ketika dapat powerUp Lupa
+	public float bulletSpeed = 15.0f;	//Untuk mengatur kecepatan peluru meluncur
+	public float fireRate;				//Untuk menentukan fireRate/seberapa cepat peluru keluar perdetiknya (makin kecil angka makin cepat)
 	public string[] LoseTagList;		//Tag apa saja yang membuat player kalah
-	public GameObject Holo;		//Untuk efek ketika mendapat powerUp magnet. sebenarnya bisa memakai sprite, cuma ini biar cepat
-	public GameObject Flame;	//Untuk efek ketika mendapat powerUp lupa
+	public GameObject Holo;				//Untuk efek ketika mendapat powerUp magnet. sebenarnya bisa memakai sprite, cuma ini biar cepat
+	public GameObject Flame;			//Untuk efek ketika mendapat powerUp lupa
 
-	private float nextFire;		//Untuk digunakan bersama fireRate
-	EnemySpawner ES;		//Reference EnemySpawner script
+	private float nextFire;			//Untuk digunakan bersama fireRate
+	EnemySpawner ES;				//Reference EnemySpawner script
 
 	//untuk status powerUp
 	private bool doubleBullet= false; // id 0
@@ -28,8 +28,8 @@ public class PlayerControler : MonoBehaviour {
 	private float boostTime = 3;
 	private float magnetTime = 10;
 
-	private ScoreKeeper SK;		//Reference ke score/coin/pahala
-	private int levelIndex = 0;		//untuk mengakses level atau bullet yang akan digunakan
+	private ScoreKeeper SK;				//Reference ke score/coin/pahala
+	private int levelIndex = 0;			//untuk mengakses level atau bullet yang akan digunakan
 	private float offSetDouble = 0.15f;	//untuk jarak ketika double PowerUp
 
 	/*===Digunakan ketika memakai asset dari DragonBone===*/
@@ -43,11 +43,10 @@ public class PlayerControler : MonoBehaviour {
 	*code yg bersangkutan akan diberi tanda DB*
 	*/
 
-	float normalSpawnTime;		//waktu  normal spawn musuh
+	float normalSpawnTime;			//waktu  normal spawn musuh
 	float boostSpawnTime = 0.3f;	//waktu spawn ketika dalam powerUp lupa / boost
 	float timerGameStart = 3f;		//waktu jeda sebelum permainan dimulai
-	bool isPlaying = false;		//status game mulai atau belum
-
+	bool isPlaying = false;			//status game mulai atau belum
 
 
 	// Use this for initialization
@@ -64,6 +63,7 @@ public class PlayerControler : MonoBehaviour {
 		//armature.animation.FadeIn (boostAnimation, -1f, -1);	//DB
 	}
 
+	//==================FIELD================
 	public bool Boost{
 		get{ 
 			return boost; 
@@ -81,16 +81,19 @@ public class PlayerControler : MonoBehaviour {
 			return magnet;
 		}
 	}
-	
+	//=======================================
+
+
 	// Update is called once per frame
 	void Update () {
-
-		if (!isPlaying) {		//jeda sebelum permainan berjalan
+		
+		//jeda sebelum permainan berjalan
+		if (!isPlaying) {		
 			timerGameStart -= Time.deltaTime;
 		}
 
-		if(timerGameStart <= 0 && !isPlaying){		//ketika waktu jeda sudah terlewat, game dimulai
-
+		//ketika waktu jeda sudah terlewat, game dimulai
+		if(timerGameStart <= 0 && !isPlaying){		
 			isPlaying = true;
 			this.GetComponent<SpriteRenderer> ().sprite = normalSprite;
 
@@ -105,15 +108,18 @@ public class PlayerControler : MonoBehaviour {
 		if(isPlaying && !boost )		//player hanya bisa menembak ketika permainan dimulai dan tidak dalam keadaan PowerUp lupa
 			Fire();
 
-		if (doubleBullet) {		//hitung mundur waktu powerUp double bullet
+		//=====================================================
+		//hitung mundur waktu powerUp double bullet
+		if (doubleBullet) {		
 			doubleBulletTime -= Time.deltaTime;
 			if (doubleBulletTime <= 0) {
 				doubleBullet = false;
 				doubleBulletTime = 10;
 			}
 		}
-
-		if (boost) {		//hitung mundur waktu PowerUp lupa
+		//=====================================================
+		//hitung mundur waktu PowerUp lupa
+		if (boost) {		
 			boostTime -= Time.deltaTime;
 			//this.GetComponent<SpriteRenderer> ().sprite = boostSprite;
 			if (boostTime <= 0) {
@@ -127,8 +133,9 @@ public class PlayerControler : MonoBehaviour {
 				Flame.SetActive (false);	//mematikan efek lupa
 			}
 		}
-
-		if(magnet){		//hitung mundur powerUp magnet
+		//=====================================================
+		//hitung mundur powerUp magnet
+		if(magnet){
 			magnetTime -= Time.deltaTime;
 			if(magnetTime<= 0){
 				magnetTime = 10;
@@ -152,21 +159,24 @@ public class PlayerControler : MonoBehaviour {
 			Vector2 leftSide = new Vector2(this.transform.position.x+offSetDouble, this.transform.position.y+1.2f);		//posisi peluru kiri
 			Vector2 rightSide = new Vector2(this.transform.position.x-offSetDouble, this.transform.position.y+1.2f);	//posisi peluru kanan
 
+			//Jika dapat double PowerUp
 			if (doubleBullet) {
 				beam = Instantiate (Bullet [levelIndex], leftSide, Quaternion.identity);
 				beam2 = Instantiate (Bullet [levelIndex], rightSide, Quaternion.identity);
 
 				Rigidbody2D rb2 = beam2.GetComponent<Rigidbody2D> ();		
 				rb2.velocity = new Vector3 (0, bulletSpeed, 0);		//untuk meluncurkan peluru2
-			} else {
+			} 
+			//keadaan normal
+			else {
 				beam = Instantiate (Bullet [levelIndex], normalPos, Quaternion.identity);
-
 			}
+
 			Rigidbody2D rb = beam.GetComponent<Rigidbody2D> ();
 			rb.velocity = new Vector3 (0, bulletSpeed, 0);		//untuk meluncurkan peluru1
-
 		}
 	}
+
 
 	void OnTriggerEnter2D (Collider2D col){
 		/*==jika tidak dalam keadaan lupa, player akan kalah ketika
@@ -182,7 +192,9 @@ public class PlayerControler : MonoBehaviour {
 			}
 		}
 
-		if(col.CompareTag("Coin")){		//jika dropItemnya coin / diamond
+		//==================================================
+		//jika dropItemnya coin / diamond
+		if(col.CompareTag("Coin")){		
 			int value = 0;
 			switch(col.GetComponent<DropItemScript>().id){
 			case 0:		//jika coin biasa
@@ -196,14 +208,20 @@ public class PlayerControler : MonoBehaviour {
 			SK.ScoreCount (value);			//simpan ke score
 		}
 
-		if (col.CompareTag ("PowerUp")) {		//jika dropItemnya powerUp
+		//===================================================
+		//jika dropItemnya powerUp
+		if (col.CompareTag ("PowerUp")) {		
 			Destroy (col.gameObject);		//hancurkan itemnya
 
-			if (col.GetComponent<DropItemScript> ().id == 0){	//jika powerUp double bullet
+			//-----------------------------
+			//jika powerUp double bullet
+			if (col.GetComponent<DropItemScript> ().id == 0){	
 				doubleBulletTime = 10;
 				doubleBullet = true;
 			}
-			else if(col.GetComponent<DropItemScript> ().id == 1){	//jika powerUp LevelUp
+			//-----------------------------
+			//jika powerUp LevelUp
+			else if(col.GetComponent<DropItemScript> ().id == 1){	
 				if(levelIndex < Bullet.Length-1)
 					levelIndex++;
 				if (levelIndex < 5 || levelIndex > 5 && levelIndex < 14){
@@ -216,7 +234,9 @@ public class PlayerControler : MonoBehaviour {
 					offSetDouble = 0.15f;
 				}
 			}
-			else if(col.GetComponent<DropItemScript> ().id == 2){	//jika powerUp Lupa
+			//-----------------------------
+			//jika powerUp Lupa
+			else if(col.GetComponent<DropItemScript> ().id == 2){
 				//armature.animation.FadeIn(boostAnimation, 0.25f, -1);		//DB
 
 				ES.spawnTime = boostSpawnTime;		//buat musuh agar spawn lebih cepat
@@ -224,10 +244,12 @@ public class PlayerControler : MonoBehaviour {
 				ES.WaveChanged ();			//untuk mengatur spawn musuh
 				Flame.SetActive (true);		//menyalakan efek lupa
 			}
-			else if(col.GetComponent<DropItemScript> ().id == 3){	//Jika powerUp magnet
+			//-----------------------------
+			//Jika powerUp magnet
+			else if(col.GetComponent<DropItemScript> ().id == 3){
 				magnetTime = 10;
 				magnet = true;
-				Holo.SetActive (true);		//menagktifkan efek magnet
+				Holo.SetActive (true);		//mengaktifkan efek magnet
 			}
 		}
 	}

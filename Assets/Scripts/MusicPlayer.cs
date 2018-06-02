@@ -9,7 +9,7 @@ public class MusicPlayer : MonoBehaviour {
 	public AudioClip bossAudio;
 
 	private AudioSource audioSource;
-	public string[] sceneName;		//Nama Scene untuk dijadikan referensi music mana yang akan diputar
+	public string[] sceneName;							//Nama Scene untuk dijadikan referensi music mana yang akan diputar
 	private bool[] changeMusicHelper = new bool[3];		//agar music hanya ada 1 yang aktif (tidak overlap)
 	private BossSpawner BS;
 
@@ -22,7 +22,7 @@ public class MusicPlayer : MonoBehaviour {
 		}
 			
 
-		if (instance != null && instance != this) {
+		if (instance != null && instance != this) {		//jika ada lebih dari satu objek Music
 			Destroy (gameObject);
 			print ("Duplicate music player self-destructing!");
 		} else {
@@ -33,6 +33,7 @@ public class MusicPlayer : MonoBehaviour {
 
 	void Update(){
 
+		//Jika dalam scene Menu utama, cerita dan Score
 		if ((SceneManager.GetActiveScene ().name == sceneName [0] || SceneManager.GetActiveScene ().name == sceneName [2]) 
 			&& changeMusicHelper[0]) {
 			audioSource.clip = menuAudio;
@@ -40,7 +41,9 @@ public class MusicPlayer : MonoBehaviour {
 			changeMusicHelper [0] = false;
 			changeMusicHelper [1] = true;
 			changeMusicHelper [2] = true;
-		} else if (SceneManager.GetActiveScene ().name == sceneName [1] && changeMusicHelper[1] && changeMusicHelper[2]) {
+		} 
+		//Jika dalam scene Game
+		else if (SceneManager.GetActiveScene ().name == sceneName [1] && changeMusicHelper[1] && changeMusicHelper[2]) {
 			audioSource.clip = gameAudio;
 			audioSource.Play ();
 			changeMusicHelper [0] = true;
@@ -48,6 +51,7 @@ public class MusicPlayer : MonoBehaviour {
 			changeMusicHelper [2] = true;
 		}
 
+		//Jika dalam scene game dan bertemu dengan boss
 		if(SceneManager.GetActiveScene ().name == sceneName [1]){
 			BS = GameObject.Find("BossSpawner").GetComponent<BossSpawner>();
 			if (BS != null) {
@@ -68,6 +72,7 @@ public class MusicPlayer : MonoBehaviour {
 		}
 	}
 
+	//Untuk menghidupkan dan mematikan music
 	public void ToggleSound(){
 		if (PlayerPrefs.GetInt ("Muted") == 0) {
 			PlayerPrefs.SetInt ("Muted", 1);

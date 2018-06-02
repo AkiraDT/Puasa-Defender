@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DropBurstScript : MonoBehaviour {
+	//Untuk drop Item banyak
+
 	public GameObject[] itemList;
 
-	private int itemIndex;	//for powerUp placing
+	private int itemIndex;			//for powerUp placing
 	private System.Random rand;
-	private int maxCount = 12;
+	private int maxCount = 12;		//untuk coin perbandingannya 7/12
 
 	// Use this for initialization
 	void Start () {
@@ -23,7 +25,8 @@ public class DropBurstScript : MonoBehaviour {
 		foreach (Transform child in this.transform) {
 			itemIndex = rand.Next(0, maxCount);
 			GameObject spawn;
-			if (itemIndex == 6 || itemIndex == 7 || itemIndex == 8 || itemIndex == 9 || itemIndex == 10 || itemIndex == 11) {
+
+			if (itemIndex == 6 || itemIndex == 7 || itemIndex == 8 || itemIndex == 9 || itemIndex == 10 || itemIndex == 11) {	//coin
 				spawn = Instantiate (itemList [0], child.transform.position, Quaternion.identity);
 			} else {
 				spawn = Instantiate (itemList[itemIndex], child.transform.position, Quaternion.identity);

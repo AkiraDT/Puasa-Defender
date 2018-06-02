@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class ScoreKeeper : MonoBehaviour {
+	//Untuk menyimpan score
+
 	public static int score = 0;
 
 	public GameObject mytext;
@@ -18,10 +20,10 @@ public class ScoreKeeper : MonoBehaviour {
 		highScoreText.GetComponent<Text> ().text = PlayerPrefs.GetInt ("highScore").ToString();
 	}
 
-	public void ScoreCount(int points){
+	public void ScoreCount(int points){		//menghitung score
 		score += points;
 		mytext.GetComponent<Text>().text = score.ToString ();
-		if (score > PlayerPrefs.GetInt ("highScore"))
+		if (score > PlayerPrefs.GetInt ("highScore"))		//jika mencapai highscore baru
 			HighScoreReached ();
 	}
 
@@ -34,11 +36,12 @@ public class ScoreKeeper : MonoBehaviour {
 		score = 0;
 	}
 
-	public void HighScoreReached(){
+	public void HighScoreReached(){			//jika highscore baru tercapai, teks berubah menjadi "HIGHSCORE"
 		highScoreText.GetComponent<Text>().text = "HIGHSCORE";
 	}
 
-	public void StoreHighScore(int newHighScore){
+
+	public void StoreHighScore(int newHighScore){		//Menyimpan highscore ke PlayerPrefs
 		int oldHighScore = PlayerPrefs.GetInt ("highScore", 0);
 		if (newHighScore > oldHighScore) {
 			PlayerPrefs.SetInt ("highScore", newHighScore);

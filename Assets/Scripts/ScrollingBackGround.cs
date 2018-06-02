@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ScrollingBackGround : MonoBehaviour {
+	//Scrolling Background (TIDAK DIGUNAKAN)
+
 	private BoxCollider2D col;
 	private PlayerControler player;
 	private float bgHeight;

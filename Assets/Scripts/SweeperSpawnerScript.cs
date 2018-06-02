@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SweeperSpawnerScript : MonoBehaviour {
-	public int id = 0;
+	//untuk spawn kotak amal dan dajjal
+
+	public int id = 0;		//id 0 untuk dajjal dan 1 untuk kotak amal
 	public GameObject sweeper;
-	public float minTime =20f;
-	public float maxTime =30f;
+	public float minTime =20f;		//waktu minimal	spawn
+	public float maxTime =30f;		//waktu maksimal spawn
 	public static float xMin;
 	public static float xMax;
 
@@ -16,7 +18,7 @@ public class SweeperSpawnerScript : MonoBehaviour {
 	private GameObject Player;
 	private int direction = 1;
 	private float width = 0.5f;
-	private float spawnerSpeed = 4f;
+	private float spawnerSpeed = 4f;		//spawner bergerak kekiri kekanan
 
 	float padding = 0.2f;
 
@@ -28,18 +30,18 @@ public class SweeperSpawnerScript : MonoBehaviour {
 		canSpawn = true;
 		Camera camera = Camera.main;
 
-		xMin = camera.ViewportToWorldPoint (new Vector3 (0, 0)).x +padding;
-		xMax = camera.ViewportToWorldPoint (new Vector3 (1, 0)).x -padding;
+		xMin = camera.ViewportToWorldPoint (new Vector3 (0, 0)).x +padding;		//batas kiri gerakan
+		xMax = camera.ViewportToWorldPoint (new Vector3 (1, 0)).x -padding;		//batas kanan gerakan
 	}
 
 	void SpawnSweeper(){
 		Instantiate (sweeper, this.transform.position, Quaternion.identity);// as GameObject;
-		if(id == 1){
+		if(id == 1){		//jika kotak amal, hanya spawn sekali sampai kotak amal yang ada hancur
 			canSpawn = false;
 		}
 	}
 
-	void OnDrawGizmos(){
+	void OnDrawGizmos(){		//untuk mempermudah di editor
 		Gizmos.DrawWireSphere (this.transform.position, 0.5f);
 	}
 
@@ -47,12 +49,12 @@ public class SweeperSpawnerScript : MonoBehaviour {
 		if (canSpawn) {
 			time += Time.deltaTime;
 
-			if (time >= spawnTime && !Player.GetComponent<PlayerControler> ().Boost) {
+			if (time >= spawnTime && !Player.GetComponent<PlayerControler> ().Boost) {		//jika waktu spawn tercapai dan player tidak dalam keadaan powerUplupa
 				SpawnSweeper ();
 				setRandomTime ();
 			}
 
-			//for always moving
+					//spawner terus bergerak kekiri kekanan
 			float FormationRightEdge = this.transform.position.x + 0.5f * width;
 			float FormationLeftEdge = this.transform.position.x - 0.5f * width;
 
@@ -73,7 +75,7 @@ public class SweeperSpawnerScript : MonoBehaviour {
 	}
 
 
-	public bool CanSpawn{ 
+	public bool CanSpawn{
 		get{ 
 			return canSpawn;
 		} 

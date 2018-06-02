@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ProjectTile : MonoBehaviour {
 	//Untuk semua object peluru
+
 	// Use this for initialization
 	public float Damage = 100f;		//jumlah damage yang diberikan
 
@@ -11,7 +12,7 @@ public class ProjectTile : MonoBehaviour {
 		return Damage;
 	}
 
-	public void Hit(){
+	public void Hit(){				//ketika menabrak objek langsung menghilang
 		Destroy (gameObject);
 	}
 }

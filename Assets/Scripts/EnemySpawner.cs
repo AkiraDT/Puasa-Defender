@@ -3,27 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour {
+	//Untuk spawn Enemy
+
 	public GameObject enemy;
-	public GameObject enemyS;	//Unique enemy
-	public GameObject waveObserver;
+	public GameObject enemyS;			//enemy dengan dropitem powerUp
+	public GameObject waveObserver;		//pengecek apakah enemy dalam satu baris hancur semua
 	public float spawnTime;
 
-	private int counter = 5;
-	private int spesialPlace;	//for enemyS placing
+	private int counter = 5;			//untuk menentukan posisi enemyS
+	private int spesialPlace;			//for enemyS placing
 	private System.Random rand;
-	private int maxCount = 7;
-	private float width = 9.5f;
-	private float height = 7.0f;
-	private bool canSpawn = true;
+	private int maxCount = 7;			// enemy 5 dan 1 waveObserver, 7 tidak dihitung
+	private bool canSpawn = true;		
 
 	// Use this for initialization
 	void Start () {
 		rand = new System.Random();
-		//InvokeRepeating("SpawnEnemies", spawnTime, spawnTime);
-		Invoke("SpawnEnemies", spawnTime);
+		Invoke("SpawnEnemies", spawnTime);		//agar trus berulang
 	}
 
-	public void WaveChanged(){
+	public void WaveChanged(){					//jika ada yg berubah pada enemy panggil ini untuk mereset
 		CancelInvoke ("SpawnEnemies");
 		if(canSpawn)
 			Invoke("SpawnEnemies", spawnTime);
@@ -34,20 +33,16 @@ public class EnemySpawner : MonoBehaviour {
 		spesialPlace = rand.Next(2, maxCount);
 		foreach (Transform child in this.transform) {
 			GameObject spawn;
-			if(counter == spesialPlace)
-				spawn = Instantiate (enemyS, child.transform.position, Quaternion.identity);// as GameObject;
-			else if(counter == 1)
-				spawn = Instantiate (waveObserver, child.transform.position, Quaternion.identity);// as GameObject;
+			if(counter == spesialPlace)		//tempat enemyS
+				spawn = Instantiate (enemyS, child.transform.position, Quaternion.identity);
+			else if(counter == 1)			//WaveObserver pasti di paling kanan
+				spawn = Instantiate (waveObserver, child.transform.position, Quaternion.identity);
 			else
-				spawn = Instantiate (enemy, child.transform.position, Quaternion.identity);// as GameObject;
+				spawn = Instantiate (enemy, child.transform.position, Quaternion.identity);
 			spawn.transform.position = child.transform.position;
 			counter--;
 		}
-		Invoke("SpawnEnemies", spawnTime);
-	}
-
-	void OnDrawGizmos(){
-		Gizmos.DrawWireCube(this.transform.position, new Vector3(width,height));
+		Invoke("SpawnEnemies", spawnTime);		//agar berulang (nested loop)
 	}
 
 	public bool CanSpawn{

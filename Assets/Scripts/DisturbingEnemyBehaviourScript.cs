@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class DisturbingEnemyBehaviourScript : MonoBehaviour {
+	//untuk kotak amal
+	//Kurang lebih sama dengan EnemyBehaviour tetpai berbeda di gerakan
+
 	public float minTime =20f;
 	public float maxTime =30f;
 	public float health = 150.0f;
@@ -31,7 +34,9 @@ public class DisturbingEnemyBehaviourScript : MonoBehaviour {
 		Player = GameObject.Find ("player");
 		Spawner = GameObject.Find ("DisturbingEnemySpawner");
 		Camera camera = Camera.main;
-		xMin = camera.ViewportToWorldPoint (new Vector3 (0, 0)).x +padding;
+
+		//batas gerakkan kiri kanan
+		xMin = camera.ViewportToWorldPoint (new Vector3 (0, 0)).x +padding;		
 		xMax = camera.ViewportToWorldPoint (new Vector3 (1, 0)).x -padding;
 
 		if (Player == null)
@@ -90,7 +95,7 @@ public class DisturbingEnemyBehaviourScript : MonoBehaviour {
 				healthBar.fillAmount =  health/maxHealth;
 			}
 		}
-		if (col.name == "ObjectDestroyer") {
+		if (col.name == "ObjectDestroyer") {		//jika kotak amal hancur, spawner aktif kembali
 			Spawner.GetComponent<SweeperSpawnerScript> ().CanSpawn = true;
 		}
 	}
